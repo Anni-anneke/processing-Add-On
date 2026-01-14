@@ -425,15 +425,16 @@ scale_image <- function(experiment, mz=NULL, i=NULL, method=c('log', '%', 'quant
       cat('selected method:', percent, '% \n')
       max_int <- max(tics)
       quant_int <- max_int * (percent/100)
-      tics[tics >= qunat_int] <- quant_int
+      tics[tics >= quant_int] <- quant_int
       pData(experiment)$TIC <- tics
     }
     if (method == 'quantile') {
       cat('selected method: quantile \n')
       sorted <- sort(tics)
-      upper_q <- round(0.75*length(tics))
+      all_int <- sorted[sorted>0]
+      upper_q <- ceiling(0.75*length(all_int))
       quan <- tics[upper_q]
-      tics[upper_q:length(tics)] <- quan
+      tics[tics>quan] <- quan
       pData(experiment)$TIC <- tics
     }
     return(experiment)
